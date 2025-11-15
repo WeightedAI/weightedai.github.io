@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>WeightedAI – Research Collective</title>
+    <meta
+      name="description"
+      content="WeightedAI is a research collective exploring state-of-the-art AI and ML, from foundation models to robust optimization and tooling."
+    />
+
+    <!-- Tailwind CSS via CDN (for rapid modern styling) -->
+    <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: [
+                'system-ui',
+                '-apple-system',
+                'BlinkMacSystemFont',
+                'SF Pro Text',
+                'Inter',
+                'sans-serif',
+              ],
+            },
+            colors: {
+              background: '#050505',
+              foreground: '#f5f5f5',
+              accent: '#f5f5f5',
+              muted: '#999999',
+              border: '#1f1f1f',
+            },
+          },
+        },
+      };
+    </script>
+
+    <!-- React + ReactDOM via CDN -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+
+    <style>
+      html,
+      body {
+        scroll-behavior: smooth;
+      }
+      ::selection {
+        background: #f5f5f5;
+        color: #050505;
+      }
+    </style>
+  </head>
+  <body class="h-full bg-background text-foreground antialiased">
+    <div id="root" class="min-h-screen"></div>
+
+    <script type="text/javascript">
+      const { useState, useEffect } = React;
+
+      const sections = [
+        { id: 'about', label: 'About' },
+        { id: 'areas', label: 'Research' },
+        { id: 'projects', label: 'Projects' },
+        { id: 'team', label: 'People' },
+        { id: 'contact', label: 'Contact' },
+      ];
+
+      function classNames(...classes) {
+        return classes.filter(Boolean).join(' ');
+      }
+
+      function useScrollSpy(sectionIds, offset = 96) {
+        const [active, setActive] = useState('');
+
+        useEffect(() => {
+          function onScroll() {
+            const scrollPosition = window.scrollY + offset;
+            let currentId = sectionIds[0];
+
+            for (const id of sectionIds) {
+              const el = document.getElementById(id);
+              if (!el) continue;
+              const top = el.offsetTop;
+              if (scrollPosition >= top) {
+                currentId = id;
+              }
+            }
+
+            setActive(currentId);
+          }
+
+          onScroll();
+          window.addEventListener('scroll', onScroll);
+          return () => window.removeEventListener('scroll', onScroll);
+        }, [sectionIds, offset]);
+
+        return active;
+      }
+
+      function Nav() {
+        const active = useScrollSpy(sections.map((s) => s.id));
+
+        return (
+          React.createElement(
+            'header',
+            {
+              className:
+                'sticky top-0 z-40 border-b border-border/60 bg-background/80 backdrop-blur-md',
+            },
+            React.createElement(
+              'div',
+              {
+                className:
+                  'mx-auto flex max-w-6xl items-center justify-between px-5 py-4 md:py-5',
+              },
+              React.createElement(
+                'div',
+                { className: 'flex items-center gap-2' },
+                React.createElement(
+                  'div',
+                  {
+                    className:
+                      'flex h-7 w-7 items-center justify-center rounded-full border border-border text-xs tracking-tight',
+                  },
+                  'W'
+                ),
+                React.createElement(
+                  'div',
+                  { className: 'leading-tight' },
+                  React.createElement(
+                    'div',
+                    {
+                      className:
+                        'text-sm font-medium uppercase tracking-[0.22em] text-foreground',
+                    },
+                    'WeightedAI'
+                  ),
+                  React.createElement(
+                    'div',
+                    { className: 'text-[0.68rem] text-muted' },
+                    'Research collective'
+                  )
+                )
+              ),
+              React.createElement(
+                'nav',
+                { className: 'hidden gap-6 text-xs md:flex' },
+                sections.map((s) =>
+                  React.createElement(
+                    'a',
+                    {
+                      key: s.id,
+                      href: '#' + s.id,
+                      className: classNames(
+                        'uppercase tracking-[0.18em] transition-colors hover:text-foreground',
+                        active === s.id ? 'text-foreground' : 'text-muted'
+                      ),
+                    },
+                    s.label
+                  )
+                )
+              )
+            )
+          )
+        );
+      }
+
+      function Hero() {
+        return (
+          React.createElement(
+            'section',
+            {
+              id: 'top',
+              className:
+                'border-b border-border/60 bg-[radial-gradient(circle_at_top,_#1a1a1a_0,_#050505_55%)]',
+            },
+            React.createElement(
+              'div',
+              {
+                className:
+                  'mx-auto flex max-w-6xl flex-col gap-12 px-5 pb-24 pt-16 md:flex-row md:items-end md:gap-16 md:pb-28 md:pt-20',
+              },
+              React.createElement(
+                'div',
+                { className: 'flex-1 space-y-6' },
+                React.createElement(
+                  'p',
+                  {
+                    className:
+                      'text-xs uppercase tracking-[0.25em] text-muted md:text-[0.7rem]',
+                  },
+                  'AI / ML RESEARCH COLLECTIVE'
+                ),
+                React.createElement(
+                  'h1',
+                  {
+                    className:
+                      'max-w-xl text-3xl font-medium tracking-tight text-foreground sm:text-4xl md:text-5xl',
+                  },
+                  'WeightedAI'
+                ),
+                React.createElement(
+                  'p',
+                  {
+                    className:
+                      'max-w-xl text-sm leading-relaxed text-muted md:text-[0.92rem]',
+                  },
+                  'We explore the frontier of machine learning — from foundation models and alignment to tooling and evaluation — and turn research insights into practical systems.'
+                ),
+                React.createElement(
+                  'div',
+                  { className: 'flex flex-wrap items-center gap-4 pt-2' },
+                  React.createElement(
+                    'a',
+                    {
+                      href: '#projects',
+                      className:
+                        'inline-flex items-center rounded-full border border-border bg-foreground px-4 py-2 text-xs font-medium uppercase tracking-[0.18em] text-background transition hover:bg-background hover:text-foreground',
+                    },
+                    'View projects'
+                  ),
+                  React.createElement(
+                    'a',
+                    {
+                      href: '#contact',
+                      className:
+                        'inline-flex items-center text-[0.7rem] uppercase tracking-[0.2em] text-muted hover:text-foreground',
+                    },
+                    'Get in touch'
+                  )
+                )
+              ),
+              React.createElement(
+                'div',
+                { className: 'flex-1' },
+                React.createElement(
+                  'div',
+                  {
+                    className:
+                      'relative h-52 overflow-hidden rounded-xl border border-border/70 bg-linear-to-b from-[#111] to-[#050505] p-5 text-xs text-muted sm:h-60 md:h-64',
+                  },
+                  React.createElement(
+                    'div',
+                    { className: 'flex items-center justify-between' },
+                    React.createElement(
+                      'span',
+                      { className: 'font-mono text-[0.65rem] uppercase tracking-[0.18em]' },
+                      'CURRENT FOCUS'
+                    ),
+                    React.createElement(
+                      'span',
+                      { className: 'text-[0.65rem] text-muted' },
+                      '2025. Q4'
+                    )
+                  ),
+                  React.createElement(
+                    'div',
+                    { className: 'mt-4 space-y-3 text-[0.7rem]' },
+                    React.createElement(
+                      'div',
+                      { className: 'flex items-center justify-between' },
+                      React.createElement(
+                        'span',
+                        { className: 'text-foreground' },
+                        'Model-weighted search'
+                      ),
+                      React.createElement(
+                        'span',
+                        { className: 'font-mono text-[0.65rem] text-muted' },
+                        'signal→decision'
+                      )
+                    ),
+                    React.createElement(
+                      'p',
+                      { className: 'text-muted' },
+                      'Structured retrieval and routing layers that treat model behaviour as a distribution, not an oracle.'
+                    ),
+                    React.createElement(
+                      'div',
+                      { className: 'flex items-center justify-between pt-1' },
+                      React.createElement(
+                        'span',
+                        { className: 'text-foreground' },
+                        'Robust evaluation'
+                      ),
+                      React.createElement(
+                        'span',
+                        { className: 'font-mono text-[0.65rem] text-muted' },
+                        'eval→action'
+                      )
+                    ),
+                    React.createElement(
+                      'p',
+                      { className: 'text-muted' },
+                      'Lightweight harnesses for tracking reliability, latency and cost under real-world workloads.'
+                    ),
+                    React.createElement(
+                      'div',
+                      { className: 'pt-2 text-[0.65rem] text-muted' },
+                      'Always open to collaborations around agents, retrieval, and ML systems engineering.'
+                    )
+                  )
+                )
+              )
+            )
+          )
+        );
+      }
+
+      function SectionShell({ id, eyebrow, title, children, right }) {
+        return (
+          React.createElement(
+            'section',
+            {
+              id,
+              className: 'border-b border-border/60 bg-background',
+            },
+            React.createElement(
+              'div',
+              {
+                className:
+                  'mx-auto flex max-w-6xl flex-col gap-10 px-5 py-16 md:flex-row md:gap-20 md:py-20',
+              },
+              React.createElement(
+                'div',
+                { className: 'md:w-[40%]' },
+                eyebrow &&
+                  React.createElement(
+                    'p',
+                    {
+                      className:
+                        'mb-3 text-[0.7rem] uppercase tracking-[0.22em] text-muted',
+                    },
+                    eyebrow
+                  ),
+                title &&
+                  React.createElement(
+                    'h2',
+                    {
+                      className:
+                        'text-xl font-medium tracking-tight text-foreground md:text-2xl',
+                    },
+                    title
+                  )
+              ),
+              React.createElement(
+                'div',
+                { className: 'md:flex-1' },
+                children,
+                right
+              )
+            )
+          )
+        );
+      }
+
+      function About() {
+        return (
+          React.createElement(
+            SectionShell,
+            {
+              id: 'about',
+              eyebrow: 'WHO WE ARE',
+              title: 'A small group of researchers and engineers building with weight, not hype.',
+            },
+            React.createElement(
+              'div',
+              { className: 'prose prose-invert max-w-none text-sm leading-relaxed' },
+              React.createElement(
+                'p',
+                null,
+                'WeightedAI is a research group focused on practical AI/ML systems. We are interested in how models behave under constraints of data, compute and human time — and how to design interfaces and infrastructure that respect those limits.'
+              ),
+              React.createElement(
+                'p',
+                null,
+                'We prefer small, composable tools over monoliths. We experiment with foundation models, retrieval, agents and evaluation, then distill what works into open projects, notes and prototypes.'
+              )
+            )
+          )
+        );
+      }
+
+      function Areas() {
+        const topics = [
+          {
+            title: 'Model-weighted interfaces',
+            body: 'Search, routing and recommendation layers that combine embeddings, retrieval and tools to steer model behaviour.',
+          },
+          {
+            title: 'Evaluation & reliability',
+            body: 'Designing evaluation loops that measure robustness, regressions and cost, not just benchmarks.',
+          },
+          {
+            title: 'Agents & tooling',
+            body: 'Practical agentic patterns for code, research and data workflows, with an emphasis on debuggability.',
+          },
+          {
+            title: 'Learning from usage',
+            body: 'Closing the loop between usage data and model configuration, prompts and routing policies.',
+          },
+        ];
+
+        return (
+          React.createElement(
+            SectionShell,
+            {
+              id: 'areas',
+              eyebrow: 'RESEARCH AREAS',
+              title: 'Where we spend most of our attention.',
+            },
+            React.createElement(
+              'div',
+              {
+                className:
+                  'grid gap-6 text-sm sm:grid-cols-2 sm:gap-7 md:gap-8',
+              },
+              topics.map((t) =>
+                React.createElement(
+                  'div',
+                  {
+                    key: t.title,
+                    className:
+                      'flex flex-col gap-2 rounded-lg border border-border/70 bg-[#050505] p-4',
+                  },
+                  React.createElement(
+                    'h3',
+                    { className: 'text-[0.88rem] font-medium text-foreground' },
+                    t.title
+                  ),
+                  React.createElement(
+                    'p',
+                    { className: 'text-[0.78rem] text-muted leading-relaxed' },
+                    t.body
+                  )
+                )
+              )
+            )
+          )
+        );
+      }
+
+      function Projects() {
+        const projects = [
+          {
+            label: 'SemiDeep',
+            status: 'ICMLT 2025',
+            href: 'https://github.com/WeightedAI/semideep',
+            description:
+              'PyTorch implementation of "Enhancing Classification with Semi-Supervised Deep Learning Using Distance-Based Sample Weights". Distance-based weighting and weighted losses for robust semi-supervised classification.',
+          },
+          {
+            label: 'SemiCART',
+            status: 'IJMLC 2024',
+            href: 'https://github.com/WeightedAI/semicart',
+            description:
+              'Semi-supervised decision tree algorithm extending CART with distance-based weighting and a modified Gini index. scikit-learn compatible and evaluated across multiple benchmark datasets.',
+          },
+          {
+            label: 'Persian OCR',
+            status: 'Model & dataset',
+            href: 'https://huggingface.co/WeightedAI/Persian_OCR',
+            description:
+              'OCR model and synthetic sentence dataset for Persian text recognition, released on Hugging Face together with the dataset WeightedAI/Persian_OCR_synth_sentences_100k.',
+          },
+        ];
+
+        return (
+          React.createElement(
+            SectionShell,
+            {
+              id: 'projects',
+              eyebrow: 'PROJECTS',
+              title: 'Selected work and directions.',
+            },
+            React.createElement(
+              'div',
+              { className: 'space-y-4 text-sm' },
+              projects.map((p) =>
+                React.createElement(
+                  'div',
+                  {
+                    key: p.label,
+                    className:
+                      'flex flex-col gap-1 rounded-lg border border-border/70 bg-[#050505] p-4 md:flex-row md:items-center md:justify-between',
+                  },
+                  React.createElement(
+                    'div',
+                    { className: 'space-y-1' },
+                    React.createElement(
+                      'div',
+                      { className: 'flex items-center gap-3' },
+                      React.createElement(
+                        p.href ? 'a' : 'span',
+                        Object.assign(
+                          {
+                            className:
+                              'text-[0.86rem] font-medium tracking-tight text-foreground',
+                          },
+                          p.href
+                            ? {
+                                href: p.href,
+                                target: '_blank',
+                                rel: 'noreferrer',
+                                className:
+                                  'text-[0.86rem] font-medium tracking-tight text-foreground border-b border-border hover:border-foreground',
+                              }
+                            : null
+                        ),
+                        p.label
+                      ),
+                      React.createElement(
+                        'span',
+                        {
+                          className:
+                            'inline-flex items-center rounded-full border border-border px-2 py-[2px] text-[0.65rem] uppercase tracking-[0.18em] text-muted',
+                        },
+                        p.status
+                      )
+                    ),
+                    React.createElement(
+                      'p',
+                      {
+                        className:
+                          'max-w-xl text-[0.8rem] leading-relaxed text-muted',
+                      },
+                      p.description
+                    )
+                  )
+                )
+              )
+            )
+          )
+        );
+      }
+
+      function Team() {
+        const members = [
+          {
+            name: 'WeightedAI collaborators',
+            role: 'Researchers & engineers',
+            blurb:
+              'We collaborate with people who enjoy careful measurement, clean interfaces and long-term projects.',
+          },
+        ];
+
+        return (
+          React.createElement(
+            SectionShell,
+            {
+              id: 'team',
+              eyebrow: 'PEOPLE',
+              title: 'Small, focused, and often collaborating.',
+            },
+            React.createElement(
+              'div',
+              { className: 'space-y-4 text-sm' },
+              members.map((m) =>
+                React.createElement(
+                  'div',
+                  {
+                    key: m.name,
+                    className:
+                      'flex flex-col gap-2 rounded-lg border border-border/70 bg-[#050505] p-4 sm:flex-row sm:items-center sm:justify-between',
+                  },
+                  React.createElement(
+                    'div',
+                    { className: 'space-y-1' },
+                    React.createElement(
+                      'p',
+                      { className: 'text-[0.86rem] font-medium text-foreground' },
+                      m.name
+                    ),
+                    React.createElement(
+                      'p',
+                      { className: 'text-[0.74rem] uppercase tracking-[0.18em] text-muted' },
+                      m.role
+                    )
+                  ),
+                  React.createElement(
+                    'p',
+                    {
+                      className:
+                        'max-w-md text-[0.8rem] leading-relaxed text-muted',
+                    },
+                    m.blurb
+                  )
+                )
+              ),
+              React.createElement(
+                'p',
+                { className: 'pt-1 text-[0.75rem] text-muted' },
+                'If you are exploring similar directions and want to compare notes or co-develop tools, reach out.'
+              )
+            )
+          )
+        );
+      }
+
+      function Contact() {
+        return (
+          React.createElement(
+            SectionShell,
+            {
+              id: 'contact',
+              eyebrow: 'CONTACT',
+              title: 'Lightweight by default. Heavyweight where it matters.',
+            },
+            React.createElement(
+              'div',
+              { className: 'space-y-5 text-sm' },
+              React.createElement(
+                'p',
+                { className: 'max-w-xl text-muted leading-relaxed' },
+                'We are open to conversations around research collaborations, early-stage product work, and infrastructure that needs careful AI/ML integration.'
+              ),
+              React.createElement(
+                'div',
+                { className: 'space-y-2 text-[0.78rem]' },
+                React.createElement(
+                  'p',
+                  { className: 'text-muted' },
+                  'For now, the easiest way to reach us is via email, GitHub, Medium, or Hugging Face:'
+                ),
+                React.createElement(
+                  'div',
+                  { className: 'flex flex-col gap-1' },
+                  React.createElement(
+                    'a',
+                    {
+                      href: 'https://github.com/WeightedAI',
+                      className:
+                        'inline-flex w-fit items-center border-b border-border text-foreground hover:border-foreground',
+                    },
+                    'github.com/WeightedAI'
+                  ),
+                  React.createElement(
+                    'a',
+                    {
+                      href: 'https://medium.com/@weighted-ai',
+                      className:
+                        'inline-flex w-fit items-center border-b border-border text-foreground hover:border-foreground',
+                    },
+                    'medium.com/@weighted-ai'
+                  ),
+                  React.createElement(
+                    'a',
+                    {
+                      href: 'https://huggingface.co/WeightedAI',
+                      className:
+                        'inline-flex w-fit items-center border-b border-border text-foreground hover:border-foreground',
+                    },
+                    'huggingface.co/WeightedAI'
+                  )
+                )
+              ),
+              React.createElement(
+                'p',
+                { className: 'pt-4 text-[0.7rem] text-muted' },
+                'This page is intentionally minimal. Most of the work happens in repos, notebooks and conversations.'
+              )
+            )
+          )
+        );
+      }
+
+      function Footer() {
+        return (
+          React.createElement(
+            'footer',
+            {
+              className:
+                'border-t border-border/60 bg-background/95 text-[0.7rem] text-muted',
+            },
+            React.createElement(
+              'div',
+              {
+                className:
+                  'mx-auto flex max-w-6xl flex-col items-start justify-between gap-3 px-5 py-6 sm:flex-row sm:items-center',
+              },
+              React.createElement(
+                'p',
+                null,
+                'WeightedAI · ',
+                new Date().getFullYear()
+              ),
+              React.createElement(
+                'div',
+                { className: 'flex flex-wrap gap-3' },
+                React.createElement(
+                  'span',
+                  { className: 'uppercase tracking-[0.18em]' },
+                  'Model-weighted research'
+                )
+              )
+            )
+          )
+        );
+      }
+
+      function App() {
+        return (
+          React.createElement(
+            'div',
+            { className: 'min-h-screen bg-background text-foreground' },
+            React.createElement(Nav, null),
+            React.createElement(Hero, null),
+            React.createElement(About, null),
+            React.createElement(Areas, null),
+            React.createElement(Projects, null),
+            React.createElement(Team, null),
+            React.createElement(Contact, null),
+            React.createElement(Footer, null)
+          )
+        );
+      }
+
+      const rootEl = document.getElementById('root');
+      const root = ReactDOM.createRoot(rootEl);
+      root.render(React.createElement(App));
+    </script>
+  </body>
+</html>
